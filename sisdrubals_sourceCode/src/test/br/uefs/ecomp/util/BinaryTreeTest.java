@@ -6,7 +6,7 @@ import org.junit.Test;
 import junit.framework.TestCase;
 
 /**
- * @author Jo√£o Victor & Resemblinck
+ * @author Jo„o Victor & Resemblinck
  */
 public class BinaryTreeTest extends TestCase {
 
