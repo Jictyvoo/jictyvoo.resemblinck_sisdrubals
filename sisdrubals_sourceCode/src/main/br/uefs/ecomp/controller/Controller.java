@@ -1,7 +1,7 @@
 package br.uefs.ecomp.controller;
 
 import br.uefs.ecomp.model.businessObjects.WarehouseManager;
-import br.uefs.ecomp.model.valueObjects.Mercadoria;
+import br.uefs.ecomp.model.valueObjects.Merchandise;
 import br.uefs.ecomp.util.Iterator;
 
 /**
@@ -54,7 +54,7 @@ public class Controller {
 	 * @param receivedMerchandise 
 	 * @return
 	 */
-	public boolean registerMerchandise(Mercadoria receivedMerchandise) {
+	public boolean registerMerchandise(Merchandise receivedMerchandise) {
 		return warehouseInstance.registerMerchandise(receivedMerchandise);
 	}
 
@@ -71,7 +71,7 @@ public class Controller {
 	 * @param location 
 	 * @return
 	 */
-	public Mercadoria searchMerchandise(String provider, String location) {
+	public Merchandise searchMerchandise(String provider, String location) {
 		return warehouseInstance.searchMerchandise(provider, location);
 	}
 

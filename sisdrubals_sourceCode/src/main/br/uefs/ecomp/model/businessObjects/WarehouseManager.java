@@ -7,10 +7,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
-import br.uefs.ecomp.model.valueObjects.Mercadoria;
+import br.uefs.ecomp.model.valueObjects.Localization;
+import br.uefs.ecomp.model.valueObjects.Merchandise;
 import br.uefs.ecomp.util.BinaryTree;
 import br.uefs.ecomp.util.Iterator;
+import br.uefs.ecomp.util.exception.InputInformationBigger;
+import br.uefs.ecomp.util.exception.InputInformationMissing;
 
 /**
  * @author Joao Victor & Resemblinck
@@ -31,9 +37,10 @@ public class WarehouseManager {
 
 	/**
 	 * @return
+	 * @throws InputInformationMissing 
+	 * @throws InputInformationBigger 
 	 */
 	public boolean readInputFile(String fileName) {
-		// TODO implement here
 		try {
 			FileReader readingFile = new FileReader(fileName);	/*abre o arquivo apenas com permissoes de leitura*/
 			BufferedReader readingNow = new BufferedReader(readingFile);	/*cria um objeto que vai armazenar os valores do arquivo em um buffer*/
@@ -41,15 +48,29 @@ public class WarehouseManager {
 			String lineReaded = readingNow.readLine(); /*inicia a leitura da primeira linha antes do laco para que possa encerrar o laco*/
 			while (lineReaded != null) {	/*linha do final do arquivo de texto recebe null ao identificar o final do arquivo*/
 				/*aqui insere funcao para corta a linha do arquivo em tres partes para armazenar os dados corretamente*/
-				String[] splitedString = lineReaded.split(",|,\\s");
-				if(splitedString.length < 3){
-					//throw Exception; lanca excecao
-					lineReaded = readingNow.readLine(); /*le as linhas restantes do arquivo*/
+				String[] splitedString = lineReaded.split(";");
+				if(splitedString.length < 7){
+					try {
+						throw new InputInformationMissing();
+					} catch (InputInformationMissing e) {
+						e.printStackTrace();
+					}
+				}
+				else if(splitedString.length > 7){
+					try {
+						throw new InputInformationBigger();
+					} catch (InputInformationBigger e) {
+						e.printStackTrace();
+					}
+					lineReaded = readingNow.readLine(); /*le a proxima do arquivo*/
 					continue;
 				}
-				Mercadoria newMerchandise = new Mercadoria(Integer.parseInt(splitedString[0]), splitedString[1]);
-				newMerchandise.getHoraInsercao();	/*para tirar o warning por enquanto --> deletar*/
-				/*adiciona a mercadoria em um lote que seria pesquisado na arvore*/
+
+				LocalDate insertDate = LocalDate.parse(splitedString[5], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+				LocalTime insertHour = LocalTime.parse(splitedString[6], DateTimeFormatter.ofPattern("HH:mm"));
+				Localization newLocalization = new Localization(Integer.parseInt(splitedString[0]), splitedString[1], splitedString[2], Integer.parseInt(splitedString[3]));
+				Merchandise newMerchandise = new Merchandise(newLocalization, splitedString[4], insertDate, insertHour);
+				this.stockedProducts.add(newMerchandise);	/*adiciona a Merchandise na arvore*/
 				lineReaded = readingNow.readLine(); /*le as linhas restantes do arquivo*/
 			}
 			readingFile.close();
@@ -64,7 +85,6 @@ public class WarehouseManager {
 	 * @return
 	 */
 	public void saveProgram() {
-		// TODO implement here
 		try{
 		
 		/*Cria arquivo no disco rigido utilizando FileOutputStream, para posteriormente gravar as informacoes*/
@@ -86,7 +106,6 @@ public class WarehouseManager {
 	 * @return
 	 */
 	public boolean loadProgram() {
-		// TODO implement here
 		 try{
 			
 			/*Abre o arquivo onde estava salva a arvore*/
@@ -110,7 +129,7 @@ public class WarehouseManager {
 	 * @param receivedMerchandise 
 	 * @return
 	 */
-	public boolean registerMerchandise(Mercadoria receivedMerchandise) {
+	public boolean registerMerchandise(Merchandise receivedMerchandise) {
 		// TODO implement here
 		return false;
 	}
@@ -129,7 +148,7 @@ public class WarehouseManager {
 	 * @param location 
 	 * @return
 	 */
-	public Mercadoria searchMerchandise(String provider, String location) {
+	public Merchandise searchMerchandise(String provider, String location) {
 		// TODO implement here
 		return null;
 	}

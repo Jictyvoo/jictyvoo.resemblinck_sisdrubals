@@ -29,6 +29,10 @@ public class BinaryTree implements Serializable {
 		this.root = new BinaryTreeNode();
 		this.sizeVar = 0;
 	}
+	
+	public void add(Object dataReceived){
+		
+	}
 
 	/**
 	 * @param newRoot novo objeto armazenado na raiz

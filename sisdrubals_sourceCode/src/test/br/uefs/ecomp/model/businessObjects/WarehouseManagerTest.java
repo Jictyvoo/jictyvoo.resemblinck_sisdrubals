@@ -6,7 +6,7 @@ import org.junit.Test;
 import junit.framework.TestCase;
 
 /**
- * @author João Victor & Resemblinck
+ * @author Joao Victor & Resemblinck
  */
 public class WarehouseManagerTest extends TestCase {
 	
