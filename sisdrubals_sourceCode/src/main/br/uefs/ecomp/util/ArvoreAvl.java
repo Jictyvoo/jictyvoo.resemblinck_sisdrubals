@@ -2,7 +2,12 @@ package br.uefs.ecomp.util;
 
 public class ArvoreAvl<E extends Comparable<E>> {
 
-    protected No<E> raiz;
+    private No<E> raiz;
+    private int size = 0;
+    
+    public int size(){
+        return size;
+    }
 
     public void inserir(E elemento) {
         No<E> n = new No<>(elemento);
@@ -14,6 +19,7 @@ public class ArvoreAvl<E extends Comparable<E>> {
         if (aComparar == null) {
 
             this.raiz = aInserir;
+            size++;
 
         } else {
 
@@ -23,6 +29,7 @@ public class ArvoreAvl<E extends Comparable<E>> {
                     aComparar.setEsquerda(aInserir);
                     aInserir.setPai(aComparar);
                     verificarBalanceamento(aComparar);
+                    size++;
                 } else {
                     inserirAVL(aComparar.getEsquerda(), aInserir);
                 }
@@ -33,6 +40,7 @@ public class ArvoreAvl<E extends Comparable<E>> {
                     aComparar.setDireita(aInserir);
                     aInserir.setPai(aComparar);
                     verificarBalanceamento(aComparar);
+                    size++;
                 } else {
                     inserirAVL(aComparar.getDireita(), aInserir);
                 }
@@ -86,6 +94,7 @@ public class ArvoreAvl<E extends Comparable<E>> {
                 removerAVL(atual.getDireita(), elemento);
             } else if (atual.getElemento().equals(elemento)) {
                 removerNoEncontrado(atual);
+                size--;
             }
         }
     }
@@ -95,7 +104,7 @@ public class ArvoreAvl<E extends Comparable<E>> {
 
         if (aRemover.getEsquerda() == null || aRemover.getDireita() == null) {
 
-            if (aRemover.getPai() == null) {
+            if (aRemover.getPai() == null && aRemover.getEsquerda() == null && aRemover.getDireita() == null) {
                 this.raiz = null;
                 aRemover = null;
                 return;
