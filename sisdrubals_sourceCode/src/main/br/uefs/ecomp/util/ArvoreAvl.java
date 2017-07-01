@@ -4,8 +4,8 @@ public class ArvoreAvl<E extends Comparable<E>> {
 
     private No<E> raiz;
     private int size = 0;
-    
-    public int size(){
+
+    public int size() {
         return size;
     }
 
@@ -84,9 +84,7 @@ public class ArvoreAvl<E extends Comparable<E>> {
     }
 
     private void removerAVL(No<E> atual, E elemento) {
-        if (atual == null) {
-            return;
-        } else {
+        if (atual != null) {
 
             if (atual.getElemento().compareTo(elemento) > 0) {
                 removerAVL(atual.getEsquerda(), elemento);
@@ -106,7 +104,6 @@ public class ArvoreAvl<E extends Comparable<E>> {
 
             if (aRemover.getPai() == null && aRemover.getEsquerda() == null && aRemover.getDireita() == null) {
                 this.raiz = null;
-                aRemover = null;
                 return;
             }
             r = aRemover;
@@ -137,7 +134,6 @@ public class ArvoreAvl<E extends Comparable<E>> {
             }
             verificarBalanceamento(r.getPai());
         }
-        r = null;
     }
 
     private No<E> rotacaoEsquerda(No<E> inicial) {
@@ -244,24 +240,39 @@ public class ArvoreAvl<E extends Comparable<E>> {
     private void setBalanceamento(No<E> no) {
         no.setBalanceamento(altura(no.getDireita()) - altura(no.getEsquerda()));
     }
-    
-    public boolean buscar(E elemento){
-    	return buscar(this.raiz, elemento);
+
+    public boolean buscar(E elemento) {
+        return buscar(this.raiz, elemento);
     }
 
     private boolean buscar(No<E> atual, E elemento) {
-		if(atual == null){
-			return false;
-		}
-		
-		if(elemento.compareTo(atual.getElemento()) < 0){
-			return buscar(atual.getEsquerda(), elemento);
-		} else if(elemento.compareTo(atual.getElemento()) > 0){
-			return buscar(atual.getDireita(), elemento);
-		} else{
-			return true;
-		}
-		
-	}
+        if (atual == null) {
+            return false;
+        }
+
+        if (elemento.compareTo(atual.getElemento()) < 0) {
+            return buscar(atual.getEsquerda(), elemento);
+        } else if (elemento.compareTo(atual.getElemento()) > 0) {
+            return buscar(atual.getDireita(), elemento);
+        } else {
+            return true;
+        }
+
+    }
+
+    final protected IQueue<No<E>> inOrder() {
+        IQueue<No<E>> queue = new Queue<>();
+        inOrder(raiz, queue);
+        return queue;
+    }
+
+    final protected void inOrder(No<E> no, IQueue<No<E>> queue) {
+        if (no == null) {
+            return;
+        }
+        inOrder(no.getEsquerda(), queue);
+        queue.add(no);
+        inOrder(no.getDireita(), queue);
+    }
 
 }
