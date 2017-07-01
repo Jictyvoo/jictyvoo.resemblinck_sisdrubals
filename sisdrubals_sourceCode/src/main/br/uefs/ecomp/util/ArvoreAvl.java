@@ -244,5 +244,24 @@ public class ArvoreAvl<E extends Comparable<E>> {
     private void setBalanceamento(No<E> no) {
         no.setBalanceamento(altura(no.getDireita()) - altura(no.getEsquerda()));
     }
+    
+    public boolean buscar(E elemento){
+    	return buscar(this.raiz, elemento);
+    }
+
+    private boolean buscar(No<E> atual, E elemento) {
+		if(atual == null){
+			return false;
+		}
+		
+		if(elemento.compareTo(atual.getElemento()) < 0){
+			return buscar(atual.getEsquerda(), elemento);
+		} else if(elemento.compareTo(atual.getElemento()) > 0){
+			return buscar(atual.getDireita(), elemento);
+		} else{
+			return true;
+		}
+		
+	}
 
 }
