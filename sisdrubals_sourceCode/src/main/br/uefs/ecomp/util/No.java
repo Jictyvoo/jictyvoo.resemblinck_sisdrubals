@@ -1,59 +1,65 @@
 package br.uefs.ecomp.util;
 
-public class No<E extends Comparable<E>> {
+import java.io.Serializable;
 
-    private No<E> esquerda;
-    private No<E> direita;
-    private No<E> pai;
-    private E elemento;
-    private int balanceamento;
+public class No<E extends Comparable<E>> implements Serializable {
 
-    public No(E elemento) {
-        setEsquerda(setDireita(setPai(null)));
-        setBalanceamento(0);
-        setElemento(elemento);
-    }
+	/**
+	 * Necessario para a serializacao
+	 */
+	private static final long serialVersionUID = 791172966631627645L;
+	private No<E> esquerda;
+	private No<E> direita;
+	private No<E> pai;
+	private E elemento;
+	private int balanceamento;
 
-    public No<E> getEsquerda() {
-        return esquerda;
-    }
+	public No(E elemento) {
+		setEsquerda(setDireita(setPai(null)));
+		setBalanceamento(0);
+		setElemento(elemento);
+	}
 
-    public void setEsquerda(No<E> esquerda) {
-        this.esquerda = esquerda;
-    }
+	public No<E> getEsquerda() {
+		return esquerda;
+	}
 
-    public No<E> getDireita() {
-        return direita;
-    }
+	public void setEsquerda(No<E> esquerda) {
+		this.esquerda = esquerda;
+	}
 
-    public No<E> setDireita(No<E> direita) {
-        this.direita = direita;
-        return direita;
-    }
+	public No<E> getDireita() {
+		return direita;
+	}
 
-    public No<E> getPai() {
-        return pai;
-    }
+	public No<E> setDireita(No<E> direita) {
+		this.direita = direita;
+		return direita;
+	}
 
-    public No<E> setPai(No<E> pai) {
-        this.pai = pai;
-        return pai;
-    }
+	public No<E> getPai() {
+		return pai;
+	}
 
-    public E getElemento() {
-        return elemento;
-    }
+	public No<E> setPai(No<E> pai) {
+		this.pai = pai;
+		return pai;
+	}
 
-    public void setElemento(E elemento) {
-        this.elemento = elemento;
-    }
+	public E getElemento() {
+		return elemento;
+	}
 
-    public int getBalanceamento() {
-        return balanceamento;
-    }
+	public void setElemento(E elemento) {
+		this.elemento = elemento;
+	}
 
-    public void setBalanceamento(int balanceamento) {
-        this.balanceamento = balanceamento;
-    }
+	public int getBalanceamento() {
+		return balanceamento;
+	}
+
+	public void setBalanceamento(int balanceamento) {
+		this.balanceamento = balanceamento;
+	}
 
 }

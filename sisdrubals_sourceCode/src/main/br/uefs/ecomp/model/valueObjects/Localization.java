@@ -104,7 +104,29 @@ public class Localization implements Serializable, Comparable<Localization> {
 
 	@Override
 	public int compareTo(Localization o) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(this.lotId == o.getLotId()){
+			if(this.address.compareTo(o.getAddress()) == 0){
+				if(this.block.compareTo(o.getBlock()) == 0){
+					if(this.merchandiseNumber == o.getMerchandiseNumber())
+						return 0;
+					
+					else if(this.merchandiseNumber < o.getMerchandiseNumber())
+						return -1;
+					else
+						return 1;
+				}
+				else if(this.merchandiseNumber < o.getMerchandiseNumber())
+					return -1;
+				else
+					return 1;
+			}
+			else if(this.address.compareTo(o.getAddress()) <= -1)
+				return -1;
+			else
+				return 1;
+		}
+		else if(this.lotId < o.getLotId())
+			return -1;
+		return 1;
 	}
 }

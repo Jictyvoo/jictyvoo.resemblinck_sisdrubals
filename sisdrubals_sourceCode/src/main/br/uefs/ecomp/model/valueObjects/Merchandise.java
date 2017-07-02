@@ -10,27 +10,27 @@ import java.time.LocalTime;
 public class Merchandise implements Serializable, Comparable<Merchandise> {
 
 	/**
-	 * 
+	 * Necessario para a serializacao
 	 */
 	private static final long serialVersionUID = 396664994876129622L;
 
 	/**
-	 * 
+	 * Localizacao id chave para a identificacao da mercadoria
 	 */
 	private Localization localization;
 
 	/**
-	 * 
+	 * o fornecedor daquela mercadoria
 	 */
 	private String provider;
 
 	/**
-	 * 
+	 * data de insercao da mercadoria no armazem
 	 */
 	private LocalDate insertDate;
 
 	/**
-	 * 
+	 * hora de insercao da mercadoria no armazem
 	 */
 	private LocalTime insertHour;
 
@@ -108,7 +108,6 @@ public class Merchandise implements Serializable, Comparable<Merchandise> {
 
 	@Override
 	public int compareTo(Merchandise arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.localization.compareTo(arg0.getLocalization());
 	}
 }

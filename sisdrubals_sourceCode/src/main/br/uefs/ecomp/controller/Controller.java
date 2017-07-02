@@ -1,6 +1,10 @@
 package br.uefs.ecomp.controller;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import br.uefs.ecomp.model.businessObjects.WarehouseManager;
+import br.uefs.ecomp.model.valueObjects.Localization;
 import br.uefs.ecomp.model.valueObjects.Merchandise;
 import br.uefs.ecomp.util.Iterator;
 
@@ -54,15 +58,15 @@ public class Controller {
 	 * @param receivedMerchandise 
 	 * @return
 	 */
-	public boolean registerMerchandise(Merchandise receivedMerchandise) {
-		return warehouseInstance.registerMerchandise(receivedMerchandise);
+	public boolean registerMerchandise(Localization receivedLocalization, String providerReceived, LocalDate dateReceived, LocalTime timeReceived) {
+		return warehouseInstance.registerMerchandise(receivedLocalization, providerReceived, dateReceived, timeReceived);
 	}
 
 	/**
 	 * @param merchandiseId 
 	 * @return
 	 */
-	public boolean removeMerchandise(int merchandiseId) {
+	public boolean removeMerchandise(Merchandise merchandiseId) {
 		return warehouseInstance.removeMerchandise(merchandiseId);
 	}
 
@@ -78,7 +82,7 @@ public class Controller {
 	/**
 	 * @return
 	 */
-	public Iterator listAll() {
+	public Iterator<Merchandise> listAll() {
 		return warehouseInstance.listAll();
 	}
 

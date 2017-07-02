@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 
 import br.uefs.ecomp.model.valueObjects.Localization;
 import br.uefs.ecomp.model.valueObjects.Merchandise;
-import br.uefs.ecomp.util.BinaryTree;
+import br.uefs.ecomp.util.ArvoreAvl;
 import br.uefs.ecomp.util.Iterator;
 import br.uefs.ecomp.util.exception.InputInformationBigger;
 import br.uefs.ecomp.util.exception.InputInformationMissing;
@@ -24,16 +24,16 @@ import br.uefs.ecomp.util.exception.InputInformationMissing;
 public class WarehouseManager {
 
 	/**
-	 * Default constructor
-	 */
-	public WarehouseManager() {
-	}
-
-	/**
 	 * Arvore que armazena os produtos estocados no armazem bem como os lotes que contem tais produtos
 	 */
-	private BinaryTree stockedProducts;
+	private ArvoreAvl<Merchandise> stockedProducts;
 
+	/**
+	 * Inicializa o construtor
+	 */
+	public WarehouseManager() {
+		this.stockedProducts = new ArvoreAvl<Merchandise>();
+	}
 
 	/**
 	 * @return
@@ -70,7 +70,7 @@ public class WarehouseManager {
 				LocalTime insertHour = LocalTime.parse(splitedString[6], DateTimeFormatter.ofPattern("HH:mm"));
 				Localization newLocalization = new Localization(Integer.parseInt(splitedString[0]), splitedString[1], splitedString[2], Integer.parseInt(splitedString[3]));
 				Merchandise newMerchandise = new Merchandise(newLocalization, splitedString[4], insertDate, insertHour);
-				this.stockedProducts.add(newMerchandise);	/*adiciona a Merchandise na arvore*/
+				this.stockedProducts.inserir(newMerchandise);	/*adiciona a Merchandise na arvore*/
 				lineReaded = readingNow.readLine(); /*le as linhas restantes do arquivo*/
 			}
 			readingFile.close();
@@ -86,17 +86,16 @@ public class WarehouseManager {
 	 */
 	public void saveProgram() {
 		try{
-		
-		/*Cria arquivo no disco rigido utilizando FileOutputStream, para posteriormente gravar as informacoes*/
-		FileOutputStream fileSaving = new FileOutputStream("../binaryTree.ser");
-		
-		/*Usa a classe ObjectOutputStream para escrever a arvore no arquivo*/
-		ObjectOutputStream objectSaver = new ObjectOutputStream(fileSaving);	
-		
-		objectSaver.writeObject(this.stockedProducts);	/*grava a arvore no arquivo*/
-		
-		objectSaver.close();
- 
+			/*Cria arquivo no disco rigido utilizando FileOutputStream, para posteriormente gravar as informacoes*/
+			FileOutputStream fileSaving = new FileOutputStream("../binaryTree.ser");
+			
+			/*Usa a classe ObjectOutputStream para escrever a arvore no arquivo*/
+			ObjectOutputStream objectSaver = new ObjectOutputStream(fileSaving);	
+			
+			objectSaver.writeObject(this.stockedProducts);	/*grava a arvore no arquivo*/
+			
+			objectSaver.close();
+			
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
@@ -105,6 +104,7 @@ public class WarehouseManager {
 	/**
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean loadProgram() {
 		 try{
 			
@@ -115,7 +115,7 @@ public class WarehouseManager {
 			ObjectInputStream receivedTree = new ObjectInputStream(fileReader);
 			
 			/*pega o que tem no arquivo e converte para a arvore a ser utilizada*/
-			this.stockedProducts = (BinaryTree) receivedTree.readObject();
+			this.stockedProducts = (ArvoreAvl<Merchandise>) receivedTree.readObject();
 			receivedTree.close();
 			return true;
 	 
@@ -124,23 +124,43 @@ public class WarehouseManager {
 		}
 		return false;
 	}
+	
+	public Merchandise createMerchandise(Localization receivedLocalization, String providerReceived, LocalDate dateReceived, LocalTime timeReceived) {
+		return new Merchandise(receivedLocalization, providerReceived, dateReceived, timeReceived);
+	}
 
 	/**
+	 * Cria localizacao para ser passada por parametro para a criacao da mercadoria
 	 * @param receivedMerchandise 
 	 * @return
 	 */
-	public boolean registerMerchandise(Merchandise receivedMerchandise) {
-		// TODO implement here
-		return false;
+	public Localization createLocalization(int lotIdReceived, String addressReceived, String blockReceived, int numberReceived) {
+		return new Localization(lotIdReceived, addressReceived, blockReceived, numberReceived);
+	}
+
+	/****
+	 * 
+	 * @param receivedLocalization
+	 * @param providerReceived
+	 * @param dateReceived
+	 * @param timeReceived
+	 * @return
+	 */
+	public boolean registerMerchandise(Localization receivedLocalization, String providerReceived, LocalDate dateReceived, LocalTime timeReceived) {
+		Merchandise search = new Merchandise(receivedLocalization, providerReceived, dateReceived, timeReceived);
+		if(this.stockedProducts.buscar(search))
+			return false;
+		this.stockedProducts.inserir(search);
+		return true;
 	}
 
 	/**
 	 * @param merchandiseId 
 	 * @return
 	 */
-	public boolean removeMerchandise(int merchandiseId) {
-		// TODO implement here
-		return false;
+	public boolean removeMerchandise(Merchandise merchandiseSearch) {
+		this.stockedProducts.remover(merchandiseSearch);
+		return true;
 	}
 
 	/**
@@ -156,9 +176,8 @@ public class WarehouseManager {
 	/**
 	 * @return
 	 */
-	public Iterator listAll() {
-		// TODO implement here
-		return null;
+	public Iterator<Merchandise> listAll() {
+		return this.stockedProducts.list();
 	}
 
 	/**

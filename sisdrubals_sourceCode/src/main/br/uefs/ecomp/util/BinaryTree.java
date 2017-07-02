@@ -126,7 +126,7 @@ public class BinaryTree implements Serializable {
 	/**
 	 * @return
 	 */
-	public Iterator iterator() {
+	public Iterator<Element> iterator() {
 		// TODO implement here
 		return null;
 	}
