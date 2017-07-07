@@ -148,7 +148,7 @@ public class WarehouseManager {
 	 */
 	public boolean registerMerchandise(Localization receivedLocalization, String providerReceived, LocalDate dateReceived, LocalTime timeReceived) {
 		Merchandise search = new Merchandise(receivedLocalization, providerReceived, dateReceived, timeReceived);
-		if(this.stockedProducts.buscar(search))
+		if(this.stockedProducts.buscar(search).compareTo(search) == 0)
 			return false;
 		this.stockedProducts.inserir(search);
 		return true;
