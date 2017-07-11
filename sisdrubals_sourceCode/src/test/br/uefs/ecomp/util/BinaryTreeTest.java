@@ -1,5 +1,7 @@
 package br.uefs.ecomp.util;
 
+import java.util.Random;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -53,6 +55,57 @@ public class BinaryTreeTest extends TestCase {
 					assertEquals(vectorString[position], arvoreTeste.buscar(vectorString[position]));
 			}
 
+		}
+		
+		@Test
+		public void testHeight(){
+			ArvoreAvl<String> arvoreTeste = new ArvoreAvl<String>();
+			String[] vectorString = new String[5];
+			vectorString[0] = "It's time to";
+			vectorString[1] = "test the";
+			vectorString[2] = "tree height";
+			vectorString[3] = "I want";
+			vectorString[4] = "that works";
+			
+			for(int position = 0; position < 5; position += 1)
+				arvoreTeste.inserir(vectorString[position]);
+			
+			assertEquals(3, arvoreTeste.height());
+		}
+		
+		@Test
+		public void testList(){
+			ArvoreAvl<Integer> arvoreTeste = new ArvoreAvl<Integer>();
+			Integer[] vectorInteger = new Integer[11];
+			Random random = new Random();
+			for(int position = 0; position < 11; position += 1)
+				vectorInteger[0] = random.nextInt(200);
+
+			for(Integer insertThis : vectorInteger)
+				arvoreTeste.inserir(insertThis);
+			Iterator<Integer> ordenado = arvoreTeste.list();
+			Integer anterior = ordenado.next();
+			while(ordenado.hasNext()){
+				Integer testNow = ordenado.next();
+				assertEquals(true, testNow >= anterior);
+				anterior = testNow;
+			}
+		}
+		
+		@Test
+		public void testSize(){
+			ArvoreAvl<String> arvoreTeste = new ArvoreAvl<String>();
+			String[] vectorString = new String[5];
+			vectorString[0] = "It's time to";
+			vectorString[1] = "test the";
+			vectorString[2] = "tree size";
+			vectorString[3] = "I want";
+			vectorString[4] = "that works";
+			
+			for(int position = 0; position < 5; position += 1)
+				arvoreTeste.inserir(vectorString[position]);
+			
+			assertEquals(5, arvoreTeste.size());
 		}
 	
 }

@@ -7,6 +7,7 @@ import br.uefs.ecomp.model.businessObjects.WarehouseManager;
 import br.uefs.ecomp.model.valueObjects.Localization;
 import br.uefs.ecomp.model.valueObjects.Merchandise;
 import br.uefs.ecomp.util.Iterator;
+import br.uefs.ecomp.util.exception.InputFileMissing;
 
 /**
  * @author Joao Victor & Resemblinck
@@ -35,8 +36,9 @@ public class Controller {
 
 	/**
 	 * @return
+	 * @throws InputFileMissing 
 	 */
-	public boolean readInputFile(String fileName) {
+	public String readInputFile(String fileName) throws InputFileMissing {
 		return warehouseInstance.readInputFile(fileName);
 	}
 

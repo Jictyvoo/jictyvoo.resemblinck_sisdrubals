@@ -15,6 +15,8 @@ import br.uefs.ecomp.model.valueObjects.Localization;
 import br.uefs.ecomp.model.valueObjects.Merchandise;
 import br.uefs.ecomp.util.ArvoreAvl;
 import br.uefs.ecomp.util.Iterator;
+import br.uefs.ecomp.util.exception.DuplicatedLocalization;
+import br.uefs.ecomp.util.exception.InputFileMissing;
 import br.uefs.ecomp.util.exception.InputInformationBigger;
 import br.uefs.ecomp.util.exception.InputInformationMissing;
 
@@ -37,10 +39,10 @@ public class WarehouseManager {
 
 	/**
 	 * @return
-	 * @throws InputInformationMissing 
-	 * @throws InputInformationBigger 
+	 * @throws InputFileMissing 
 	 */
-	public boolean readInputFile(String fileName) {
+	public String readInputFile(String fileName) throws InputFileMissing {
+		String returnString = "";
 		try {
 			FileReader readingFile = new FileReader(fileName);	/*abre o arquivo apenas com permissoes de leitura*/
 			BufferedReader readingNow = new BufferedReader(readingFile);	/*cria um objeto que vai armazenar os valores do arquivo em um buffer*/
@@ -50,18 +52,12 @@ public class WarehouseManager {
 				/*aqui insere funcao para corta a linha do arquivo em tres partes para armazenar os dados corretamente*/
 				String[] splitedString = lineReaded.split(";");
 				if(splitedString.length < 7){
-					try {
-						throw new InputInformationMissing();
-					} catch (InputInformationMissing e) {
-						e.printStackTrace();
-					}
+					returnString += new InputInformationMissing();
+					System.err.printf("Conteudo da linha contem poucas informacoes");
 				}
 				else if(splitedString.length > 7){
-					try {
-						throw new InputInformationBigger();
-					} catch (InputInformationBigger e) {
-						e.printStackTrace();
-					}
+					returnString += new InputInformationBigger();
+					System.err.printf("Conteudo da linha contem informacoes demais");
 					lineReaded = readingNow.readLine(); /*le a proxima do arquivo*/
 					continue;
 				}
@@ -70,15 +66,20 @@ public class WarehouseManager {
 				LocalTime insertHour = LocalTime.parse(splitedString[6], DateTimeFormatter.ofPattern("HH:mm"));
 				Localization newLocalization = new Localization(Integer.parseInt(splitedString[0]), splitedString[1], splitedString[2], Integer.parseInt(splitedString[3]));
 				Merchandise newMerchandise = new Merchandise(newLocalization, splitedString[4], insertDate, insertHour);
-				this.stockedProducts.inserir(newMerchandise);	/*adiciona a Merchandise na arvore*/
+				if(this.stockedProducts.buscar(newMerchandise) == null)
+					this.stockedProducts.inserir(newMerchandise);	/*adiciona a Merchandise na arvore*/
+				else{
+					System.err.printf("Mercadoria duplicada");
+					returnString += new DuplicatedLocalization(newLocalization);
+				}
 				lineReaded = readingNow.readLine(); /*le as linhas restantes do arquivo*/
 			}
 			readingFile.close();
-			return true;
 		} catch (IOException e) {
 			System.err.printf("Erro na abertura do arquivo: %s.\n",	e.getMessage());
+			throw new InputFileMissing(fileName);
 		}
-		return false;
+		return returnString;
 	}
 
 	/**

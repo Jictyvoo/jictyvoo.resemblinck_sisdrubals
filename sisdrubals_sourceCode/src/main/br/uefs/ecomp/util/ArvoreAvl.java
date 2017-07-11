@@ -12,6 +12,11 @@ public class ArvoreAvl<E extends Comparable<E>> implements Serializable {
 	private No<E> raiz;
 	private int size = 0;
 
+	public ArvoreAvl() {
+		super();
+		this.size = 0;
+	}
+
 	public int size() {
 		return size;
 	}
@@ -53,7 +58,7 @@ public class ArvoreAvl<E extends Comparable<E>> implements Serializable {
 				}
 
 			} else {
-				// O nó já existe
+				/*O nó já existe*/
 			}
 		}
 	}
@@ -227,6 +232,27 @@ public class ArvoreAvl<E extends Comparable<E>> implements Serializable {
 			return p;
 		}
 	}
+	
+	/**
+	 * C�lcula a altura da �rvore a partir de um determinado ramo
+	 * @param elementReceived
+	 * @return
+	 */
+	private int height(No<E> elementReceived){
+		if(elementReceived == null)
+			return 0;
+		int leftHeight = this.height(elementReceived.getEsquerda());
+		int rightHeight = this.height(elementReceived.getDireita());
+		return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
+	}
+	
+	/**
+	 * Calcula a altura da �rvore a partir da raiz
+	 * @return
+	 */
+	public int height(){
+		return this.height(this.raiz);
+	}
 
 	private int altura(No<E> atual) {
 		if (atual == null) {
@@ -296,9 +322,9 @@ public class ArvoreAvl<E extends Comparable<E>> implements Serializable {
 
 		@Override
 		public E next() {
-			if(this.hasNext()){
+			if(this.hasNext())
 				return this.search.remove();
-			}
+			
 			return null;
 		}
 		
