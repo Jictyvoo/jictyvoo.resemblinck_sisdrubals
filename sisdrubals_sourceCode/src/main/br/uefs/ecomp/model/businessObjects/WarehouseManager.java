@@ -147,20 +147,16 @@ public class WarehouseManager {
 	 * @param timeReceived
 	 * @return
 	 */
-	public boolean registerMerchandise(Localization receivedLocalization, String providerReceived, LocalDate dateReceived, LocalTime timeReceived) {
-		Merchandise search = new Merchandise(receivedLocalization, providerReceived, dateReceived, timeReceived);
-		if(this.stockedProducts.buscar(search).compareTo(search) == 0)
-			return false;
-		this.stockedProducts.inserir(search);
-		return true;
+	public void registerMerchandise(Localization receivedLocalization, String providerReceived, LocalDate dateReceived, LocalTime timeReceived) {
+		this.stockedProducts.inserir(new Merchandise(receivedLocalization, providerReceived, dateReceived, timeReceived));
 	}
 
 	/**
 	 * @param merchandiseId 
 	 * @return
 	 */
-	public boolean removeMerchandise(Merchandise merchandiseSearch) {
-		this.stockedProducts.remover(merchandiseSearch);
+	public boolean removeMerchandise(Merchandise merchandise) {
+		this.stockedProducts.remover(merchandise);
 		return true;
 	}
 
@@ -169,9 +165,8 @@ public class WarehouseManager {
 	 * @param location 
 	 * @return
 	 */
-	public Merchandise searchMerchandise(String provider, String location) {
-		// TODO implement here
-		return null;
+	public Merchandise searchMerchandise(Merchandise merchandise) {
+		return this.stockedProducts.buscar(merchandise);
 	}
 
 	/**

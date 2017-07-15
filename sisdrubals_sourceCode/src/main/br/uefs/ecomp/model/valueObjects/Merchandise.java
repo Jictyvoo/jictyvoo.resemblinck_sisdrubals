@@ -44,6 +44,10 @@ public class Merchandise implements Serializable, Comparable<Merchandise> {
 		this.insertDate = dateReceived;
 		this.insertHour = timeReceived;
 	}
+	
+	public Merchandise(Localization receivedLocalization) {
+		this.localization = receivedLocalization;
+	}
 
 	/**
 	 * @return

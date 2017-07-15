@@ -102,7 +102,7 @@ public class ArvoreAvl<E extends Comparable<E>> implements Serializable {
 				removerAVL(atual.getEsquerda(), elemento);
 			} else if (atual.getElemento().compareTo(elemento) < 0) {
 				removerAVL(atual.getDireita(), elemento);
-			} else if (atual.getElemento().equals(elemento)) {
+			} else {
 				removerNoEncontrado(atual);
 				size--;
 			}

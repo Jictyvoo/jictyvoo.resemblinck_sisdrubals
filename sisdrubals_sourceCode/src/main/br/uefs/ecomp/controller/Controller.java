@@ -2,6 +2,7 @@ package br.uefs.ecomp.controller;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import br.uefs.ecomp.model.businessObjects.WarehouseManager;
 import br.uefs.ecomp.model.valueObjects.Localization;
@@ -28,7 +29,7 @@ public class Controller {
 		this.warehouseInstance = new WarehouseManager();
 	}
 	
-	public Controller getInstance(){
+	public static Controller getInstance(){
 		if(controllerInstance == null)
 			controllerInstance = new Controller();
 		return controllerInstance;
@@ -60,16 +61,19 @@ public class Controller {
 	 * @param receivedMerchandise 
 	 * @return
 	 */
-	public boolean registerMerchandise(Localization receivedLocalization, String providerReceived, LocalDate dateReceived, LocalTime timeReceived) {
-		return warehouseInstance.registerMerchandise(receivedLocalization, providerReceived, dateReceived, timeReceived);
+	public void registerMerchandise(int lotId, String adress, String block, int merchandiseNumber, String providerReceived, String dateReceived, String timeReceived) {
+		Localization localization = new Localization(lotId, adress, block, merchandiseNumber);
+		LocalDate insertDate = LocalDate.parse(dateReceived, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		LocalTime insertHour = LocalTime.parse(timeReceived, DateTimeFormatter.ofPattern("HH:mm"));
+		warehouseInstance.registerMerchandise(localization, providerReceived, insertDate, insertHour);
 	}
 
 	/**
 	 * @param merchandiseId 
 	 * @return
 	 */
-	public boolean removeMerchandise(Merchandise merchandiseId) {
-		return warehouseInstance.removeMerchandise(merchandiseId);
+	public boolean removeMerchandise(int lotId, String adress, String block, int merchandiseNumber) {
+		return warehouseInstance.removeMerchandise(new Merchandise(new Localization(lotId, adress, block, merchandiseNumber)));
 	}
 
 	/**
@@ -77,8 +81,8 @@ public class Controller {
 	 * @param location 
 	 * @return
 	 */
-	public Merchandise searchMerchandise(String provider, String location) {
-		return warehouseInstance.searchMerchandise(provider, location);
+	public Merchandise searchMerchandise(int lotId, String adress, String block, int merchandiseNumber) {
+		return warehouseInstance.searchMerchandise(new Merchandise(new Localization(lotId, adress, block, merchandiseNumber)));
 	}
 
 	/**
