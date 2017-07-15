@@ -17,7 +17,7 @@ public class BinaryTreeTest extends TestCase {
 		
 		@Test
 		public void testAddInTree(){
-			ArvoreAvl<String> arvoreTeste = new ArvoreAvl<String>();
+			AvlTree<String> arvoreTeste = new AvlTree<String>();
 			String[] vectorString = new String[5];
 			vectorString[0] = "It's time to";
 			vectorString[1] = "test the";
@@ -26,15 +26,15 @@ public class BinaryTreeTest extends TestCase {
 			vectorString[4] = "that works";
 			
 			for(int position = 0; position < 5; position += 1)
-				arvoreTeste.inserir(vectorString[position]);
+				arvoreTeste.add(vectorString[position]);
 
 			for(int position = 0; position < 5; position += 1)
-				assertEquals(vectorString[position], arvoreTeste.buscar(vectorString[position]));
+				assertEquals(vectorString[position], arvoreTeste.search(vectorString[position]));
 		}
 		
 		@Test
 		public void testRemoveInTree(){
-			ArvoreAvl<String> arvoreTeste = new ArvoreAvl<String>();
+			AvlTree<String> arvoreTeste = new AvlTree<String>();
 			String[] vectorString = new String[5];
 			vectorString[0] = "It's time to";
 			vectorString[1] = "test the";
@@ -43,23 +43,23 @@ public class BinaryTreeTest extends TestCase {
 			vectorString[4] = "that works";
 			
 			for(int position = 0; position < 5; position += 1)
-				arvoreTeste.inserir(vectorString[position]);
+				arvoreTeste.add(vectorString[position]);
 			
-			arvoreTeste.remover(vectorString[3]);
-			arvoreTeste.remover(vectorString[1]);
+			arvoreTeste.remove(vectorString[3]);
+			arvoreTeste.remove(vectorString[1]);
 
 			for(int position = 0; position < 5; position += 1){
 				if(position == 3 || position == 1)
-					assertEquals(null, arvoreTeste.buscar(vectorString[position]));
+					assertEquals(null, arvoreTeste.search(vectorString[position]));
 				else
-					assertEquals(vectorString[position], arvoreTeste.buscar(vectorString[position]));
+					assertEquals(vectorString[position], arvoreTeste.search(vectorString[position]));
 			}
 
 		}
 		
 		@Test
 		public void testHeight(){
-			ArvoreAvl<String> arvoreTeste = new ArvoreAvl<String>();
+			AvlTree<String> arvoreTeste = new AvlTree<String>();
 			String[] vectorString = new String[5];
 			vectorString[0] = "It's time to";
 			vectorString[1] = "test the";
@@ -68,21 +68,21 @@ public class BinaryTreeTest extends TestCase {
 			vectorString[4] = "that works";
 			
 			for(int position = 0; position < 5; position += 1)
-				arvoreTeste.inserir(vectorString[position]);
+				arvoreTeste.add(vectorString[position]);
 			
 			assertEquals(3, arvoreTeste.height());
 		}
 		
 		@Test
 		public void testList(){
-			ArvoreAvl<Integer> arvoreTeste = new ArvoreAvl<Integer>();
+			AvlTree<Integer> arvoreTeste = new AvlTree<Integer>();
 			Integer[] vectorInteger = new Integer[11];
 			Random random = new Random();
 			for(int position = 0; position < 11; position += 1)
 				vectorInteger[0] = random.nextInt(200);
 
 			for(Integer insertThis : vectorInteger)
-				arvoreTeste.inserir(insertThis);
+				arvoreTeste.add(insertThis);
 			Iterator<Integer> ordenado = arvoreTeste.list();
 			Integer anterior = ordenado.next();
 			while(ordenado.hasNext()){
@@ -94,7 +94,7 @@ public class BinaryTreeTest extends TestCase {
 		
 		@Test
 		public void testSize(){
-			ArvoreAvl<String> arvoreTeste = new ArvoreAvl<String>();
+			AvlTree<String> arvoreTeste = new AvlTree<String>();
 			String[] vectorString = new String[5];
 			vectorString[0] = "It's time to";
 			vectorString[1] = "test the";
@@ -103,7 +103,7 @@ public class BinaryTreeTest extends TestCase {
 			vectorString[4] = "that works";
 			
 			for(int position = 0; position < 5; position += 1)
-				arvoreTeste.inserir(vectorString[position]);
+				arvoreTeste.add(vectorString[position]);
 			
 			assertEquals(5, arvoreTeste.size());
 		}

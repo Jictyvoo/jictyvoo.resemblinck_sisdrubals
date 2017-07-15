@@ -8,6 +8,7 @@ import br.uefs.ecomp.model.businessObjects.WarehouseManager;
 import br.uefs.ecomp.model.valueObjects.Localization;
 import br.uefs.ecomp.model.valueObjects.Merchandise;
 import br.uefs.ecomp.util.Iterator;
+import br.uefs.ecomp.util.exception.DuplicatedLocalization;
 import br.uefs.ecomp.util.exception.InputFileMissing;
 
 /**
@@ -38,8 +39,9 @@ public class Controller {
 	/**
 	 * @return
 	 * @throws InputFileMissing 
+	 * @throws DuplicatedLocalization 
 	 */
-	public String readInputFile(String fileName) throws InputFileMissing {
+	public String readInputFile(String fileName) throws InputFileMissing, DuplicatedLocalization {
 		return warehouseInstance.readInputFile(fileName);
 	}
 
@@ -60,8 +62,9 @@ public class Controller {
 	/**
 	 * @param receivedMerchandise 
 	 * @return
+	 * @throws DuplicatedLocalization 
 	 */
-	public void registerMerchandise(int lotId, String adress, String block, int merchandiseNumber, String providerReceived, String dateReceived, String timeReceived) {
+	public void registerMerchandise(int lotId, String adress, String block, int merchandiseNumber, String providerReceived, String dateReceived, String timeReceived) throws DuplicatedLocalization {
 		Localization localization = new Localization(lotId, adress, block, merchandiseNumber);
 		LocalDate insertDate = LocalDate.parse(dateReceived, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		LocalTime insertHour = LocalTime.parse(timeReceived, DateTimeFormatter.ofPattern("HH:mm"));
@@ -72,7 +75,7 @@ public class Controller {
 	 * @param merchandiseId 
 	 * @return
 	 */
-	public boolean removeMerchandise(int lotId, String adress, String block, int merchandiseNumber) {
+	public Merchandise removeMerchandise(int lotId, String adress, String block, int merchandiseNumber) {
 		return warehouseInstance.removeMerchandise(new Merchandise(new Localization(lotId, adress, block, merchandiseNumber)));
 	}
 

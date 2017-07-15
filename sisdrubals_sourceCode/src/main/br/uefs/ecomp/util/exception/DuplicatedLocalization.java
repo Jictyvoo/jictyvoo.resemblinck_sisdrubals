@@ -12,4 +12,9 @@ public class DuplicatedLocalization extends Exception {
 	public DuplicatedLocalization(Localization duplicated){
 		super("O item " + duplicated + " inserido ja existe");
 	}
+
+	public DuplicatedLocalization(String error) {
+		super(error);
+	}
+	
 }

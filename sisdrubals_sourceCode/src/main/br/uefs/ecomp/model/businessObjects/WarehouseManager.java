@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 
 import br.uefs.ecomp.model.valueObjects.Localization;
 import br.uefs.ecomp.model.valueObjects.Merchandise;
-import br.uefs.ecomp.util.ArvoreAvl;
+import br.uefs.ecomp.util.AvlTree;
 import br.uefs.ecomp.util.Iterator;
 import br.uefs.ecomp.util.exception.DuplicatedLocalization;
 import br.uefs.ecomp.util.exception.InputFileMissing;
@@ -28,20 +28,21 @@ public class WarehouseManager {
 	/**
 	 * Arvore que armazena os produtos estocados no armazem bem como os lotes que contem tais produtos
 	 */
-	private ArvoreAvl<Merchandise> stockedProducts;
+	private AvlTree<Merchandise> stockedProducts;
 
 	/**
 	 * Inicializa o construtor
 	 */
 	public WarehouseManager() {
-		this.stockedProducts = new ArvoreAvl<Merchandise>();
+		this.stockedProducts = new AvlTree<Merchandise>();
 	}
 
 	/**
 	 * @return
 	 * @throws InputFileMissing 
+	 * @throws DuplicatedLocalization 
 	 */
-	public String readInputFile(String fileName) throws InputFileMissing {
+	public String readInputFile(String fileName) throws InputFileMissing, DuplicatedLocalization {
 		String returnString = "";
 		try {
 			FileReader readingFile = new FileReader(fileName);	/*abre o arquivo apenas com permissoes de leitura*/
@@ -66,8 +67,8 @@ public class WarehouseManager {
 				LocalTime insertHour = LocalTime.parse(splitedString[6], DateTimeFormatter.ofPattern("HH:mm"));
 				Localization newLocalization = new Localization(Integer.parseInt(splitedString[0]), splitedString[1], splitedString[2], Integer.parseInt(splitedString[3]));
 				Merchandise newMerchandise = new Merchandise(newLocalization, splitedString[4], insertDate, insertHour);
-				if(this.stockedProducts.buscar(newMerchandise) == null)
-					this.stockedProducts.inserir(newMerchandise);	/*adiciona a Merchandise na arvore*/
+				if(this.stockedProducts.search(newMerchandise) == null)
+					this.stockedProducts.add(newMerchandise);	/*adiciona a Merchandise na arvore*/
 				else{
 					System.err.printf("Mercadoria duplicada");
 					returnString += new DuplicatedLocalization(newLocalization);
@@ -116,7 +117,7 @@ public class WarehouseManager {
 			ObjectInputStream receivedTree = new ObjectInputStream(fileReader);
 			
 			/*pega o que tem no arquivo e converte para a arvore a ser utilizada*/
-			this.stockedProducts = (ArvoreAvl<Merchandise>) receivedTree.readObject();
+			this.stockedProducts = (AvlTree<Merchandise>) receivedTree.readObject();
 			receivedTree.close();
 			return true;
 	 
@@ -125,39 +126,26 @@ public class WarehouseManager {
 		}
 		return false;
 	}
-	
-	public Merchandise createMerchandise(Localization receivedLocalization, String providerReceived, LocalDate dateReceived, LocalTime timeReceived) {
-		return new Merchandise(receivedLocalization, providerReceived, dateReceived, timeReceived);
-	}
 
 	/**
-	 * Cria localizacao para ser passada por parametro para a criacao da mercadoria
-	 * @param receivedMerchandise 
-	 * @return
-	 */
-	public Localization createLocalization(int lotIdReceived, String addressReceived, String blockReceived, int numberReceived) {
-		return new Localization(lotIdReceived, addressReceived, blockReceived, numberReceived);
-	}
-
-	/****
 	 * 
 	 * @param receivedLocalization
 	 * @param providerReceived
 	 * @param dateReceived
 	 * @param timeReceived
 	 * @return
+	 * @throws DuplicatedLocalization 
 	 */
-	public void registerMerchandise(Localization receivedLocalization, String providerReceived, LocalDate dateReceived, LocalTime timeReceived) {
-		this.stockedProducts.inserir(new Merchandise(receivedLocalization, providerReceived, dateReceived, timeReceived));
+	public void registerMerchandise(Localization receivedLocalization, String providerReceived, LocalDate dateReceived, LocalTime timeReceived) throws DuplicatedLocalization {
+		this.stockedProducts.add(new Merchandise(receivedLocalization, providerReceived, dateReceived, timeReceived));
 	}
 
 	/**
 	 * @param merchandiseId 
 	 * @return
 	 */
-	public boolean removeMerchandise(Merchandise merchandise) {
-		this.stockedProducts.remover(merchandise);
-		return true;
+	public Merchandise removeMerchandise(Merchandise merchandise) {
+		return this.stockedProducts.remove(merchandise);
 	}
 
 	/**
@@ -166,7 +154,7 @@ public class WarehouseManager {
 	 * @return
 	 */
 	public Merchandise searchMerchandise(Merchandise merchandise) {
-		return this.stockedProducts.buscar(merchandise);
+		return this.stockedProducts.search(merchandise);
 	}
 
 	/**
