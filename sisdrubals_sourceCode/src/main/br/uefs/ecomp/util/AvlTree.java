@@ -237,6 +237,10 @@ public class AvlTree<E extends Comparable<E>> implements Serializable {
 			return p;
 		}
 	}
+	
+	public int height(){
+		return height(this.root);
+	}
 
 	private int height(Node<E> current) {
 		if (current == null) {
