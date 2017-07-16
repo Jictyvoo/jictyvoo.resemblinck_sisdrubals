@@ -17,6 +17,12 @@ public class AvlTreeTest extends TestCase {
 		public void setUp(){}
 		
 		@Test
+		public void testIsEmpty(){
+			AvlTree<String> arvoreTeste = new AvlTree<String>();
+			assertEquals(arvoreTeste.isEmpty(), true);
+		}
+		
+		@Test
 		public void testAddInTree() throws DuplicatedLocalization{
 			AvlTree<String> arvoreTeste = new AvlTree<String>();
 			String[] vectorString = new String[5];
