@@ -200,50 +200,62 @@ public class AvlTree<E extends Comparable<E>> implements Serializable {
 		}
 	}
 
+	/**
+	 * Método que realiza uma rotação simples à esquerda, ocorre quando é inserido um Nó na direita de
+	 * um filho à direita, desbalanceando a árvore, então tem de ser feita uma rotação para a esquerda. 
+	 * @param initial - Raiz da sub-arvore
+	 * @return A nova raiz da sub-arvore após o balanceamento
+	 */
 	private Node<E> leftRotation(Node<E> initial) {
 
-		Node<E> right = initial.getRight();
-		right.setParent(initial.getParent());
+		Node<E> right = initial.getRight(); //Guarda a referência para o filho direito
+		right.setParent(initial.getParent()); //Seta o pai do nó
 
-		initial.setRight(right.getLeft());
+		initial.setRight(right.getLeft());  //Seta o filho direito de "initial" como sendo o filho esquerdo do seu filho direito
 
-		if (initial.getRight() != null) {
+		if (initial.getRight() != null) { //Verifica que "initial" ainda possui filho direito
 			initial.getRight().setParent(initial);
 		}
 
-		right.setLeft(initial);
-		initial.setParent(right);
+		right.setLeft(initial); //Põe "initial" na esquerda 
+		initial.setParent(right); //O antigo filho direito agora vira a nova raiz
 
-		if (right.getParent() != null) {
+		if (right.getParent() != null) { //Verifica que não é a raiz da arvore
 
-			if (right.getParent().getRight() == initial) {
+			if (right.getParent().getRight() == initial) { 
 				right.getParent().setRight(right);
 			} else if (right.getParent().getLeft() == initial) {
 				right.getParent().setLeft(right);
 			}
 		}
 
-		setBalancing(initial);
+		setBalancing(initial); //Atualiza o fator de balanceamento 
 		setBalancing(right);
 
-		return right;
+		return right; //Retorna a nova raiz da sub-arvore que acaba de ser balanceada
 	}
 
+	/**
+	 * Método que realiza uma rotação simples à direita, ocorre quando é inserido um Nó na esquerda de
+	 * um filho à esquerda, desbalanceando a árvore, então tem de ser feita uma rotação para a direita.
+	 * @param initial - Raiz da sub-arvore
+	 * @return A nova raiz da sub-arvore após o balanceamento
+	 */
 	private Node<E> rightRotation(Node<E> initial) {
 
-		Node<E> left = initial.getLeft();
-		left.setParent(initial.getParent());
+		Node<E> left = initial.getLeft(); //Guarda referência para o filho esquerdo de "initial"
+		left.setParent(initial.getParent()); //Seta o pai do nó
 
-		initial.setLeft(left.getRight());
+		initial.setLeft(left.getRight()); //Seta o filho esquerdo de "initial" como sendo o filho direito do seu filho esquerdo
 
-		if (initial.getLeft() != null) {
+		if (initial.getLeft() != null) { //Verifica que "initial" ainda possui filho esquerdo
 			initial.getLeft().setParent(initial);
 		}
 
-		left.setRight(initial);
-		initial.setParent(left);
+		left.setRight(initial); //Põe "initial" na direita
+		initial.setParent(left); //O antigo filho esquerdo agora vira a nova raiz
 
-		if (left.getParent() != null) {
+		if (left.getParent() != null) { //Verifica que não é a raiz da arvore
 
 			if (left.getParent().getRight() == initial) {
 				left.getParent().setRight(left);
@@ -252,22 +264,43 @@ public class AvlTree<E extends Comparable<E>> implements Serializable {
 			}
 		}
 
-		setBalancing(initial);
+		setBalancing(initial); //Atualiza o fator de balanceamento
 		setBalancing(left);
 
-		return left;
+		return left; //Retorna a nova raiz da sub-arvore que acaba de ser balanceada
 	}
 
+	/**
+	 * Método que realiza uma dupla rotação. Primeiro uma rotação simples à esquerda, depois uma rotação
+	 * simples à direita. Ocorre quando é inserido um Nó na sub-arvore direita de uma sub-arvore à esquerda
+	 * de uma determinada raiz, desbalanceando a árvore.
+	 * 
+	 * @param initial - Raiz da sub-arvore
+	 * @return A nova raiz da sub-arvore após o balanceamento
+	 */
 	private Node<E> doubleRotationLeftRight(Node<E> initial) {
 		initial.setLeft(leftRotation(initial.getLeft()));
 		return rightRotation(initial);
 	}
 
+	/**
+	 * Método que realiza uma dupla rotação. Primeiro uma rotação simples à direita, depois uma rotação
+	 * simples à esquerda. Ocorre quando é inserido um Nó na sub-arvore esquerda de uma sub-arvore à direita
+	 * de uma determinada raiz, desbalanceando a árvore.
+	 * 
+	 * @param initial - Raiz da sub-arvore
+	 * @return A nova raiz da sub-arvore após o balanceamento
+	 */
 	private Node<E> doubleRotationRightLeft(Node<E> initial) {
 		initial.setRight(rightRotation(initial.getRight()));
 		return leftRotation(initial);
 	}
 
+	/**
+	 * Método que retorna o filho sucessor de um determinado nó
+	 * @param q - Nó do qual se deseja recuperar o sucessor
+	 * @return O filho sucessor do nó passado
+	 */
 	private Node<E> successor(Node<E> q) {
 		if (q.getRight() != null) {
 			Node<E> r = q.getRight();
@@ -285,76 +318,135 @@ public class AvlTree<E extends Comparable<E>> implements Serializable {
 		}
 	}
 	
+	/**
+	 * Método que retorna a altura desde a raiz da arvore
+	 * @return Altura da arvore completa
+	 */
 	public int height(){
 		return height(this.root);
 	}
 
+	/**
+	 * Método recursivo que retorna a altura de qualquer sub-arvore
+	 * @param current - Raiz da sub-arvore
+	 * @return Altura da sub-arvore
+	 */
 	private int height(Node<E> current) {
-		if (current == null) {
+		if (current == null) { //Verifica se tem raiz
 			return -1;
 		}
 
-		if (current.getLeft() == null && current.getRight() == null) {
+		if (current.getLeft() == null && current.getRight() == null) { //Retorna 0 se tiver uma raiz sem filhos
 			return 0;
-		} else if (current.getLeft() == null) {
+		} else if (current.getLeft() == null) { //Se não tiver filho esquerdo retorna a altura apenas da direita
 			return 1 + height(current.getRight());
-		} else if (current.getRight() == null) {
+		} else if (current.getRight() == null) { //Se não tiver filho direito retorna a altura apenas da esquerda
 			return 1 + height(current.getLeft());
-		} else {
+		} else { //Se tiver 2 filhos, retorna a maior altura entre os dois
 			return 1 + Math.max(height(current.getLeft()), height(current.getRight()));
 		}
 	}
 
+	/**
+	 * Método que atualiza o fator de balanceamento de um nó, com base na altura dos filhos
+	 * @param node - Nó que tera o fator de balanceamento atualizado
+	 */
 	private void setBalancing(Node<E> node) {
 		node.setBalancing(height(node.getRight()) - height(node.getLeft()));
 	}
 
+	/**
+	 * Método que busca um elemento na árvore
+	 * @param data - Elemento que será buscado
+	 * @return Referência para o elemento buscado ou null caso ele não seja encontrado
+	 */
 	public E search(E data) {
 		return search(this.root, data);
 	}
 
+	/**
+	 * Método recursivo de busca binária na árvore
+	 * @param current - Raiz da arvore/sub-arvore
+	 * @param data - Elemento buscado
+	 * @return Referência para o elemento buscado ou null caso ele não seja encontrado
+	 */
 	private E search(Node<E> current, E data) {
-		if (current == null) {
+		if (current == null) { //Chegou ao final e não encontrou
 			return null;
 		}
 
-		if (data.compareTo(current.getData()) < 0) {
+		if (data.compareTo(current.getData()) < 0) { //Verifica se está no lado esquerdo
 			return search(current.getLeft(), data);
-		} else if (data.compareTo(current.getData()) > 0) {
+		} else if (data.compareTo(current.getData()) > 0) { //Verifica se está no lado direito 
 			return search(current.getRight(), data);
-		} else {
+		} else { //Encontrou
 			return current.getData();
 		}
 
 	}
 
+	/**
+	 * Método para percorrer a árvore em ordem
+	 * @return Fila contendo os elementos da arvore ordenados
+	 */
 	final protected IQueue<E> inOrder() {
 		IQueue<E> queue = new Queue<E>();
 		inOrder(root, queue);
 		return queue;
 	}
 
+	/**
+	 * Método recursivo para perorrer a arvore em ordem e adicionar os elementos em uma fila
+	 * @param node - Raiz da arvore/sub-arvore
+	 * @param queue - Fila que irá conter os elementos
+	 */
 	final protected void inOrder(Node<E> node, IQueue<E> queue) {
 		if (node == null) {
 			return;
 		}
-		inOrder(node.getLeft(), queue);
+		inOrder(node.getLeft(), queue); 
 		queue.add(node.getData());
 		inOrder(node.getRight(), queue);
 	}
 	
+	/**
+	 * Método que retorna o iterador para que possa listar os elementos da árvore
+	 * @return Iterador da arvore
+	 */
+	final public Iterator<E> list(){
+		return new AvlIterator(this.inOrder());
+	}
+	
+	/**
+	 * Classe privada que implementa o iterador da arvore
+	 * @author João Victor & Resemblinck Freitas
+	 *
+	 */
 	private class AvlIterator implements Iterator<E> {
+		/**
+		 * Fila para ser percorrida
+		 */
 		private IQueue<E> search;
 		
+		/**
+		 * Construtor que inicializa o iterador
+		 * @param received - Fila com os elementos ordenados
+		 */
 		protected AvlIterator(IQueue<E> received){
 			this.search = received;
 		}
 
+		/**
+		 * Método que verifica se ainda há elementos para serem listados
+		 */
 		@Override
 		public boolean hasNext() {
 			return !this.search.isEmpty();
 		}
 
+		/**
+		 * Método que retorna o próximo elemento que será listado
+		 */
 		@Override
 		public E next() {
 			if(this.hasNext())
@@ -363,10 +455,6 @@ public class AvlTree<E extends Comparable<E>> implements Serializable {
 			return null;
 		}
 		
-	}
-	
-	final public Iterator<E> list(){
-		return new AvlIterator(this.inOrder());
 	}
 
 }
