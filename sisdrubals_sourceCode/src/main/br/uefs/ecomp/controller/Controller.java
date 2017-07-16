@@ -1,15 +1,15 @@
 package br.uefs.ecomp.controller;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.io.IOException;
 
 import br.uefs.ecomp.model.businessObjects.WarehouseManager;
 import br.uefs.ecomp.model.valueObjects.Localization;
 import br.uefs.ecomp.model.valueObjects.Merchandise;
 import br.uefs.ecomp.util.Iterator;
+import br.uefs.ecomp.util.exception.DataOverlayException;
 import br.uefs.ecomp.util.exception.DuplicatedLocalization;
-import br.uefs.ecomp.util.exception.InputFileMissing;
+import br.uefs.ecomp.util.exception.IncorrectFormatException;
+import br.uefs.ecomp.util.exception.InputInformationIncorrect;
 
 /**
  * @author Joao Victor & Resemblinck Freitas
@@ -43,24 +43,31 @@ public class Controller {
 	 * @return String - String contendo os erros encontrados durante a leitura.
 	 * @throws InputFileMissing 
 	 * @throws DuplicatedLocalization 
+	 * @throws IOException 
 	 */
-	public String readInputFile(String fileName) throws InputFileMissing, DuplicatedLocalization {
+	public String[] readInputFile(String fileName) throws DuplicatedLocalization, IOException {
 		return warehouseInstance.readInputFile(fileName);
 	}
 
 	/**
 	 * Método para salvar os dados que estiver na árvore no momento em que o método for chamado.
+	 * @throws IOException 
 	 */
-	public void saveProgram() {
+	public void saveProgram() throws IOException {
 		warehouseInstance.saveProgram();
 	}
 
 	/**
 	 * Método para carregar todos os dados salvos em uma execução anterior do programa.
 	 * @return Boolean - True caso os dados sejam recuperados com sucesso, false caso contrário.
+	 * @throws IOException 
 	 */
-	public boolean loadProgram() {
-		return warehouseInstance.loadProgram();
+	public void loadProgram() throws IOException {
+		try {
+			warehouseInstance.loadProgram();
+		} catch (DataOverlayException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	/**
@@ -76,10 +83,17 @@ public class Controller {
 	 * @throws DuplicatedLocalization
 	 */
 	public void registerMerchandise(int lotId, String adress, String block, int merchandiseNumber, String providerReceived, String dateReceived, String timeReceived) throws DuplicatedLocalization {
-		Localization localization = new Localization(lotId, adress, block, merchandiseNumber);
-		LocalDate insertDate = LocalDate.parse(dateReceived, DateTimeFormatter.ofPattern("dd/MM/yyyy")); //Converte uma string em LocalDate.
-		LocalTime insertHour = LocalTime.parse(timeReceived, DateTimeFormatter.ofPattern("HH:mm")); //Converte uma string em LocalTime.
-		warehouseInstance.registerMerchandise(localization, providerReceived, insertDate, insertHour);
+		String merchandise = lotId + ";" + adress + ";" + block + ";" + merchandiseNumber + ";" + providerReceived
+				 + ";"+ dateReceived + ";" + timeReceived;
+		try {
+			warehouseInstance.registerMerchandise(merchandise);
+		} catch (DuplicatedLocalization e) {
+			System.out.println(e.getMessage());	
+		} catch (InputInformationIncorrect e) {
+			System.out.println(e.getMessage());
+		} catch (IncorrectFormatException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	/**

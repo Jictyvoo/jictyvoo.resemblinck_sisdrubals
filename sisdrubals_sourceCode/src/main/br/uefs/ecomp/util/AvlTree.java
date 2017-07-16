@@ -39,6 +39,14 @@ public class AvlTree<E extends Comparable<E>> implements Serializable {
 	public int size() {
 		return size;
 	}
+	
+	/**
+	 * Método que retorna um booleano indicando se a arvore está ou não vazia
+	 * @return Boolean - True se estiver vazia, false caso contrário
+	 */
+	public boolean isEmpty(){
+		return root == null;
+	}
 
 	/**
 	 * Método que recebe um elemento, cria um novo nó e insere na árvore
@@ -88,7 +96,7 @@ public class AvlTree<E extends Comparable<E>> implements Serializable {
 				}
 
 			} else {
-				throw new DuplicatedLocalization("O item " + toInsert + " inserido ja existe");
+				throw new DuplicatedLocalization();
 			}
 		}
 	}

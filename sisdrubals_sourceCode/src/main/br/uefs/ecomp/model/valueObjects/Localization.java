@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Localization implements Serializable, Comparable<Localization> {
 
 	/**
-	 * 
+	 * Necessario para a serializacao
 	 */
 	private static final long serialVersionUID = -2083354264825032920L;
 
