@@ -81,10 +81,10 @@ public class WarehouseManagerTest extends TestCase {
 		
 		try {
 			warehouseTest.loadProgram();
-		} catch (DataOverlayException e) {
-			assertEquals(true, e instanceof DataOverlayException);
 		} catch (IOException e) {
 			System.err.println("Não Há salvamento anterior do programa");
+		} catch (Exception e) {
+			assertEquals(true, e instanceof DataOverlayException);
 		}
 	}
 }
