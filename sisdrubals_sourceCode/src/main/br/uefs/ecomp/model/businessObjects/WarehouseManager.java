@@ -43,10 +43,9 @@ public class WarehouseManager {
 	 * @param fileName - Nome ou diretorio do arquivo.
 	 * @return String[] - Vetor de String contendo os erros encontrados durante a leitura.
 	 * @throws InputFileMissing
-	 * @throws DuplicatedLocalization
 	 * @throws IOException 
 	 */
-	public String[] readInputFile(String fileName) throws DuplicatedLocalization, IOException {
+	public String[] readInputFile(String fileName) throws IOException {
 		String returnString = ""; //String para armazenar erros encontrados
 		int lineNumber = 1; //Contador de linhas do arquivo
 		FileReader readingFile = null;
@@ -72,8 +71,9 @@ public class WarehouseManager {
 					lineNumber++;
 				}
 			}
-		} catch (IOException e) { //Erro na abertura do arquivo
-			returnString += e.getMessage();
+		} catch (IOException exceptionFound) { //Erro na abertura do arquivo
+			returnString += exceptionFound.getMessage();
+			throw exceptionFound;
 		}
 		finally { //Fecha o arquivo
 			if(readingFile != null){
@@ -124,19 +124,19 @@ public class WarehouseManager {
 	@SuppressWarnings("unchecked")
 	public void loadProgram() throws IOException, DataOverlayException {
 			FileInputStream fileReader = null;
+			boolean throwException = false;
 			ObjectInputStream receivedTree = null;
 			try {
 				fileReader = new FileInputStream("../binaryTree.ser"); //Abre o arquivo onde estava salva a arvore
 				receivedTree = new ObjectInputStream(fileReader); //le o objeto arvore salva no arquivo
 				
 				if(!this.stockedProducts.isEmpty()) //Verifica se ja existem dados cadastrados
-					throw new DataOverlayException("Já existem dados cadastrados! Prosseguir com esta operação resultaria "
-							+ "em uma sopreposição.");
+					throwException = true;
 				else
 					this.stockedProducts = (AvlTree<Merchandise>) receivedTree.readObject(); //pega o que tem no arquivo e converte para a arvore a ser utilizada
 			
 			} catch (FileNotFoundException e) { //Erro ao buscar o arquivo
-				System.out.println(e.getMessage());
+				throw e;
 			} catch (ClassNotFoundException e) { //Erro ao tentar desserializar a arvore
 				System.out.println(e.getMessage());
 			} catch (IOException e) {
@@ -148,6 +148,10 @@ public class WarehouseManager {
 						receivedTree.close();
 				}
 			}
+			
+			if(throwException)
+				throw new DataOverlayException("Já existem dados cadastrados! Prosseguir com esta operação resultaria "
+						+ "em uma sopreposição.");
 	}
 
 	/**
