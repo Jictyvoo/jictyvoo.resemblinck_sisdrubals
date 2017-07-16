@@ -12,7 +12,7 @@ import br.uefs.ecomp.util.exception.DuplicatedLocalization;
 import br.uefs.ecomp.util.exception.InputFileMissing;
 
 /**
- * @author Joao Victor & Resemblinck
+ * @author Joao Victor & Resemblinck Freitas
  */
 public class Controller {
 

@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import br.uefs.ecomp.util.exception.DuplicatedLocalization;
 
+/**
+ * @author JoÃ£o Victor & Resemblinck Freitas
+ */
 public class AvlTree<E extends Comparable<E>> implements Serializable {
 
 	/**
@@ -11,35 +14,60 @@ public class AvlTree<E extends Comparable<E>> implements Serializable {
 	 */
 	private static final long serialVersionUID = -7488367896222321979L;
 	
+	/**
+	 * Raíz da árvore
+	 */
 	private Node<E> root;
+	
+	/**
+	 * Total de elementos da árvore
+	 */
 	private int size = 0;
 
+	/**
+	 * Construtor da árvore
+	 */
 	public AvlTree() {
 		super();
 		this.size = 0;
 	}
 
+	/**
+	 * Método que retorna o total de elementos presentes na árvore
+	 * @return size
+	 */
 	public int size() {
 		return size;
 	}
 
+	/**
+	 * Método que recebe um elemento, cria um novo nó e insere na árvore
+	 * @param data - elemento a ser inserido
+	 * @throws DuplicatedLocalization
+	 */
 	public void add(E data) throws DuplicatedLocalization {
 		Node<E> n = new Node<>(data);
 		addAVL(this.root, n);
 	}
 
+	/**
+	 * Método recursivo para encontrar a posição correta de inserção do elemento passado como parâmetro
+	 * @param toCompare - Nó a ser comparado, para ver se a inserção deve ser feita no lado esquerdo ou direito
+	 * @param toInsert - Nó a ser inserido
+	 * @throws DuplicatedLocalization
+	 */
 	private void addAVL(Node<E> toCompare, Node<E> toInsert) throws DuplicatedLocalization {
 
-		if (toCompare == null) {
+		if (toCompare == null) { //Indica que a árvore está vazia
 
 			this.root = toInsert;
 			size++;
 
-		} else {
+		} else { //Árvore não vazia
 
 			if ((toInsert.getData()).compareTo(toCompare.getData()) < 0) {
 
-				if (toCompare.getLeft() == null) {
+				if (toCompare.getLeft() == null) { 
 					toCompare.setLeft(toInsert);
 					toInsert.setParent(toCompare);
 					checkBalancing(toCompare);
@@ -65,38 +93,53 @@ public class AvlTree<E extends Comparable<E>> implements Serializable {
 		}
 	}
 
+	/**
+	 * Método que checa o fator de balanceamento da árvore para saber se precisa ser balanceada
+	 * @param current - Raiz da árvore/sub-arvore que será checada
+	 */
 	private void checkBalancing(Node<E> current) {
 		setBalancing(current);
 		int balancing = current.getBalancing();
 
-		if (balancing == -2) {
+		if (balancing == -2) { //Verifica se precisa balancear
 
-			if (height(current.getLeft().getLeft()) >= height(current.getLeft().getRight())) {
-				current = rightRotation(current);
+			if (height(current.getLeft().getLeft()) >= height(current.getLeft().getRight())) { //Verifica a altura nos dois lados
+				current = rightRotation(current); //Faz uma rotação
 			} else {
-				current = doubleRotationLeftRight(current);
+				current = doubleRotationLeftRight(current); //Faz uma dupla rotação
 			}
 
-		} else if (balancing == 2) {
+		} else if (balancing == 2) { //Verifica se precisa balancear
 
-			if (height(current.getRight().getRight()) >= height(current.getRight().getLeft())) {
-				current = leftRotation(current);
+			if (height(current.getRight().getRight()) >= height(current.getRight().getLeft())) { //Verifica a altura nos dois lados
+				current = leftRotation(current); //Faz uma rotação
 			} else {
-				current = doubleRotationRightLeft(current);
+				current = doubleRotationRightLeft(current); //Faz uma dupla rotação
 			}
 		}
 
-		if (current.getParent() != null) {
-			checkBalancing(current.getParent());
+		if (current.getParent() != null) { //Verifica se não é a raiz
+			checkBalancing(current.getParent()); //Checa o fator de balanceamento do pai
 		} else {
 			this.root = current;
 		}
 	}
 
+	/**
+	 * Método de remoção da árvore
+	 * @param data - Elemento a ser removido
+	 * @return Referência para o objeto removido ou null caso ele não seja encontrado
+	 */
 	public E remove(E data) {
 		return removeAVL(this.root, data);
 	}
 
+	/**
+	 * Método recursivo para encontrar o Nó a ser removido
+	 * @param current - Raiz da arvore/sub-arvore
+	 * @param data - Elemento que sera removido
+	 * @return Referência para o objeto removido ou null caso ele não seja encontrado
+	 */
 	private E removeAVL(Node<E> current, E data) {
 		if (current != null) {
 
@@ -114,26 +157,30 @@ public class AvlTree<E extends Comparable<E>> implements Serializable {
 		return null;
 	}
 
+	/**
+	 * Método que remove um determinado Nó da arvore
+	 * @param toRemove - Nó a ser removido
+	 */
 	private void removeFoundNode(Node<E> toRemove) {
 		Node<E> r;
 
-		if (toRemove.getLeft() == null || toRemove.getRight() == null) {
+		if (toRemove.getLeft() == null || toRemove.getRight() == null) { //Verifica se o Nó possui 0 ou 1 filho
 
-			if (toRemove.getParent() == null && toRemove.getLeft() == null && toRemove.getRight() == null) {
+			if (toRemove.getParent() == null && toRemove.getLeft() == null && toRemove.getRight() == null) { //Raiz sem filhos
 				this.root = null;
 				return;
 			}
 			r = toRemove;
 
-		} else {
-			r = successor(toRemove);
-			toRemove.setData(r.getData());
+		} else { //Com 2 filhos
+			r = successor(toRemove); //Captura o sucessor
+			toRemove.setData(r.getData()); //Coloca o filho sucessor no lugar do pai
 		}
 
 		Node<E> p;
-		if (r.getLeft() != null) {
+		if (r.getLeft() != null) { //Verifica se tem filho esquerdo
 			p = r.getLeft();
-		} else {
+		} else { //Verifica se tem filho direito
 			p = r.getRight();
 		}
 

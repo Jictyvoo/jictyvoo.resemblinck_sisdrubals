@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 /**
- * @author Joao Victor & Resemblinck
+ * @author Joao Victor & Resemblinck Freitas
  */
 public class Merchandise implements Serializable, Comparable<Merchandise> {
 

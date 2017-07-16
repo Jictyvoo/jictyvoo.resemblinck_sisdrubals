@@ -3,7 +3,7 @@ package br.uefs.ecomp.model.valueObjects;
 import java.io.Serializable;
 
 /**
- * @author João Victor & Resemblinck
+ * @author João Victor & Resemblinck Freitas
  */
 public class Localization implements Serializable, Comparable<Localization> {
 

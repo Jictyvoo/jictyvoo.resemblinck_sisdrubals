@@ -2,7 +2,7 @@ package br.uefs.ecomp.util;
 
 /**
  * Classe de Estrutura de Dados para gerenciar dados no formato FIFO
- * @author João Victor Oliveira Couto & Resemblinck
+ * @author João Victor Oliveira Couto & Resemblinck Freitas
  **/
 public class Queue<TypeReceived> implements IQueue<TypeReceived>{
 	

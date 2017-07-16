@@ -21,7 +21,7 @@ import br.uefs.ecomp.util.exception.InputInformationBigger;
 import br.uefs.ecomp.util.exception.InputInformationMissing;
 
 /**
- * @author Joao Victor & Resemblinck
+ * @author Joao Victor & Resemblinck Freitas
  */
 public class WarehouseManager {
 
