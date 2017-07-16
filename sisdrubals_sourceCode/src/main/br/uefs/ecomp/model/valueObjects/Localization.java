@@ -42,56 +42,64 @@ public class Localization implements Serializable, Comparable<Localization> {
 	}
 
 	/**
-	 * @return
+	 * Método que recupera o Id do Lote.
+	 * @return lotId
 	 */
 	public int getLotId() {
 		return this.lotId;
 	}
 
 	/**
-	 * @param value
+	 * Método que altera o Id do Lote.
+	 * @param value - Novo id do lote.
 	 */
 	public void setLotId(int value) {
 		this.lotId = value;
 	}
 
 	/**
-	 * @return
+	 * Método que retorna o endereço.
+	 * @return adress
 	 */
 	public String getAddress() {
 		return this.address;
 	}
 
 	/**
-	 * @param value
+	 * Método que altera o endereço.
+	 * @param value - novo endereço.
 	 */
 	public void setAddress(String value) {
 		this.address = value;
 	}
 
 	/**
-	 * @return
+	 * Método que retorna o Bloco.
+	 * @return block
 	 */
 	public String getBlock() {
 		return this.block;
 	}
 
 	/**
-	 * @param value
+	 * Método que altera o bloco.
+	 * @param value - novo bloco.
 	 */
 	public void setBlock(String value) {
 		this.block = value;
 	}
 
 	/**
-	 * @return
+	 * Método que retorna o numero da mercadoria.
+	 * @return merchandiseNumber
 	 */
 	public int getMerchandiseNumber() {
 		return this.merchandiseNumber;
 	}
 
 	/**
-	 * @param value
+	 * Método que altera o numero da mercadoria.
+	 * @param value - novo numero.
 	 */
 	public void setMerchandiseNumber(int value) {
 		this.merchandiseNumber = value;

@@ -34,10 +34,6 @@ public class Merchandise implements Serializable, Comparable<Merchandise> {
 	 */
 	private LocalTime insertHour;
 
-	/**
-	 * @param receivedLocalization 
-	 * @param providerReceived
-	 */
 	public Merchandise(Localization receivedLocalization, String providerReceived, LocalDate dateReceived, LocalTime timeReceived) {
 		this.localization = receivedLocalization;
 		this.provider = providerReceived;
@@ -50,56 +46,64 @@ public class Merchandise implements Serializable, Comparable<Merchandise> {
 	}
 
 	/**
-	 * @return
+	 * Método que retorna a localização da mercadoria.
+	 * @return localization
 	 */
 	public Localization getLocalization() {
 		return this.localization;
 	}
 
 	/**
-	 * @param value
+	 * Método que altera a localização.
+	 * @param value - Nova localização
 	 */
 	public void setLocalization(Localization value) {
 		this.localization = value;
 	}
 
 	/**
-	 * @return
+	 * Método que retorna o fornecedor da mercadoria.
+	 * @return provider
 	 */
 	public String getProvider() {
 		return this.provider;
 	}
 
 	/**
-	 * @param value
+	 * Método que altera o fornecedor da mercadoria.
+	 * @param value - novo fornecedor
 	 */
 	public void setProvider(String value) {
 		this.provider = value;
 	}
 
 	/**
-	 * @return
+	 * Método que retorna a data de inserção da mercadoria.
+	 * @return insertDate
 	 */
 	public LocalDate getInsertDate() {
 		return this.insertDate;
 	}
 
 	/**
-	 * @param value
+	 * Método que altera a data de inserção da mercadoria.
+	 * @param value - nova data
 	 */
 	public void setInsertDate(LocalDate value) {
 		this.insertDate = value;
 	}
 
 	/**
-	 * @return
+	 * Método que retorna a hora de inserção da mercadoria.
+	 * @return insertHour
 	 */
 	public LocalTime getInsertHour() {
 		return this.insertHour;
 	}
 
 	/**
-	 * @param value
+	 * Método que altera a hora de inserção da mercadoria.
+	 * @param value - nova hora de inserção
 	 */
 	public void setInsertHour(LocalTime value) {
 		this.insertHour = value;
