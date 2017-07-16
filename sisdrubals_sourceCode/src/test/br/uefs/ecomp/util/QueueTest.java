@@ -2,7 +2,7 @@ package br.uefs.ecomp.util;
 
 import org.junit.Test;
 
-import br.uefs.ecomp.util2.Queue;
+import br.uefs.ecomp.util.Queue;
 import junit.framework.TestCase;
 
 public class QueueTest extends TestCase {

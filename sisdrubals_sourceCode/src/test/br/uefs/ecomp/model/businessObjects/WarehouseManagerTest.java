@@ -3,13 +3,8 @@ package br.uefs.ecomp.model.businessObjects;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.uefs.ecomp.model.businessObjects2.WarehouseManager;
-import br.uefs.ecomp.util.exception2.AlienCaractere;
-import br.uefs.ecomp.util.exception2.DuplicatedLocalization;
-import br.uefs.ecomp.util.exception2.InputFileMissing;
-import br.uefs.ecomp.util.exception2.InputInformationBigger;
-import br.uefs.ecomp.util.exception2.InputInformationMissing;
-import br.uefs.ecomp.util.exception2.InvalidDateTime;
+import br.uefs.ecomp.model.businessObjects.WarehouseManager;
+import br.uefs.ecomp.util.exception.DuplicatedLocalization;
 import junit.framework.TestCase;
 
 /**

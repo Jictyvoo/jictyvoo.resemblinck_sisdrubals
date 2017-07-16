@@ -3,9 +3,9 @@ package br.uefs.ecomp.util;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.uefs.ecomp.util.exception2.DuplicatedLocalization;
-import br.uefs.ecomp.util2.AvlTree;
-import br.uefs.ecomp.util2.Iterator;
+import br.uefs.ecomp.util.exception.DuplicatedLocalization;
+import br.uefs.ecomp.util.AvlTree;
+import br.uefs.ecomp.util.Iterator;
 import junit.framework.TestCase;
 
 /**
