@@ -459,7 +459,6 @@ public class AvlTree<E extends Comparable<E>> implements Serializable {
 		public E next() {
 			if(this.hasNext())
 				return this.search.remove();
-			
 			return null;
 		}
 		

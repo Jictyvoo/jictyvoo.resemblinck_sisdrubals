@@ -153,13 +153,13 @@ public class WarehouseManager {
 	/**
 	 * Método para registrar uma nova mercadoria na árvore.
 	 * 
-	 * @param atributos - String contendo todos os atributos necessários para criar uma Merchandise.
+	 * @param attributes - String contendo todos os atributos necessários para criar uma Merchandise.
 	 * @throws InputInformationIncorrect
 	 * @throws IncorrectFormatException
 	 * @throws DuplicatedLocalization
 	 */
-	public void registerMerchandise(String atributos) throws InputInformationIncorrect, IncorrectFormatException, DuplicatedLocalization  {
-		String[] splitedString = atributos.split(";"); //Quebra a String recebida para separar os dados
+	public void registerMerchandise(String attributes) throws InputInformationIncorrect, IncorrectFormatException, DuplicatedLocalization  {
+		String[] splitedString = attributes.split(";"); //Quebra a String recebida para separar os dados
 		if(splitedString.length != 7){ //Verifica se a quantidade de dados está correta
 			throw new InputInformationIncorrect();
 		}
